@@ -6,44 +6,92 @@
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="generator" content="Geany 1.25" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script src="bower_components/pouchdb/dist/pouchdb.js"></script>
 	<link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css" />
+	<link rel="stylesheet" href="css/mystyles.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
 </head>
 
-<body ng-app="RapidLog">
+<body ng-app="MyApp" layout="column" ng-controller="DailyCtrl as dc">
 	<md-toolbar>
 		<h1>Rapid log journal</h1>
 	</md-toolbar>
 	
-	<md-sidenav md-is-locked-open="true">
-		Sidenav
-	</md-sidenav>
+	<div class="container" layout="row" flex="100">
+		<md-sidenav md-is-locked-open="true" class="md-whiteframe-4dp">
+			<md-toolbar>
+				<h3 class="md-toolbar-tools">Период</h3>
+			</md-toolbar>
+			
+			<!--
+			<md-radio-group>
+				<md-radio-button value="day">День</md-radio-button>
+				<md-radio-button value="week">Неделя</md-radio-button>
+				<md-radio-button value="month">Месяц</md-radio-button>
+			</md-radio-group>
+			-->
+				
+			<md-datepicker ng-model="dc.selectedDate" md-placeholder="Введите дату" md-date-filter="dc.hasDayRecord" ng-change="dc.loadDay();"></md-datepicker>
+			
+			<md-toolbar>
+				<h3 class="md-toolbar-tools">Разделы дневника</h3>
+			</md-toolbar>
+			
+			<md-list>
+				<md-list-item>
+					<md-button ng-click="dc.selectModule('food');">Питание</md-button>
+				</md-list-item>
+				<md-list-item>
+					<md-button>План на день</md-button>
+				</md-list-item>		
+				<md-list-item>
+					<md-button>Дневник</md-button>
+				</md-list-item>	
+				<md-list-item>
+					<md-button>Хронодекс</md-button>
+				</md-list-item>									
+			</md-list>	
+		</md-sidenav>
 
-	<md-content>
-		Content
-	</md-content>
+		<md-content id="content" flex>
+			<md-list>
+				<md-list-item ng-repeat="r in dc.selectedModule">
+					{{r.bullet}}: {{r.short}}
+				</md-list-item>
+			</md-list>	
+		</md-content>
+	</div>
 
+	
    	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/angular-route/angular-route.js"></script>
 	<script src="bower_components/angular-animate/angular-animate.js"></script>
 	<script src="bower_components/angular-aria/angular-aria.js"></script>
 	<script src="bower_components/angular-material/angular-material.js"></script>
-    <script>require('./js/controllers.js');</script>
-    <script src="js/app.js"></script>
-<!--
-    <script>
-        angular
-            .element(document)
-            .ready(function() {
-                angular.bootstrap(document.body, ['testApp']);
-            });
-    </script>
--->
+	<script src="js/app.js"></script>
+	<script src="js/services.js"></script>
+	<script src="js/controllers.js"></script>
 	<script>
-		angular.module('RapidLog', ['ngMaterial'])
+		angular.module('MyApp', ['ngMaterial', 'RapidLog'])
 			.run(function() {
-				console.log('RapidLog has started');
+				var localDB = new PouchDB('local');
+				var remoteDB = new PouchDB('http://localhost:5984/bullet_journal');				
+				localDB.sync(remoteDB).on('complete', function() {
+					localDB.info().then(function(info) {
+						console.log('Done syncing');
+						console.log(info);
+					});
+				}).on('error', function(err) {
+					console.log(err);
+				});
 			});
 	</script>
+	<style>
+		.myApp {
+			display:block;
+			height: 100%;
+		}
+	</style>	
 </body>
 
 </html>
