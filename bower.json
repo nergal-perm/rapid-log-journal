@@ -1,0 +1,33 @@
+{
+  "name": "rapid-log-journal",
+  "authors": [
+    "nergal-perm <nergal@psu.ru>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.5",
+    "angular-route": "^1.5.3",
+    "angular-cookies": "^1.5.3",
+    "angular-resource": "^1.5.3",
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.3",
+    "angular-animate": "^1.5.5",
+    "angular-aria": "^1.5.5",
+    "angular-material": "^1.0.7",
+    "angular-messages": "^1.5.5"
+  },
+  "resolutions": {
+    "angular": "^1.5.5"
+  }
+}
