@@ -2,11 +2,18 @@
   "name": "rapid-log-journal",
   "version": "0.0.1",
   "description": "",
-  "main": "main.js",
+  "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
   },
   "author": "nergal-perm",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "nconf": "^0.8.4",
+    "request": "^2.71.0"
+  },
+  "window": {
+    "toolbar": true
+  }  
 }

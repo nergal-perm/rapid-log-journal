@@ -36,10 +36,13 @@
 			<md-toolbar>
 				<h3 class="md-toolbar-tools">Разделы дневника</h3>
 			</md-toolbar>
-			
+
 			<md-list>
 				<md-list-item>
 					<md-button ng-click="dc.selectModule('food');">Питание</md-button>
+				</md-list-item>
+				<md-list-item> 
+					<md-button ng-click="dc.selectModule('weather');">Погода</md-button>
 				</md-list-item>
 				<md-list-item>
 					<md-button>План на день</md-button>
@@ -83,6 +86,7 @@
 					});
 				}).on('error', function(err) {
 					console.log(err);
+
 				});
 			});
 	</script>

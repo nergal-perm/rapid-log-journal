@@ -1,6 +1,7 @@
 (function() {
 	'use strict';
 	
-	angular.module('RapidLog', ['ngMaterial']);
+	angular.module('RapidLog', ['ngMaterial', 'Weather']);
+	angular.module('Weather', []);
 
 })();

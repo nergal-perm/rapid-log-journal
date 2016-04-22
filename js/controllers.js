@@ -4,16 +4,20 @@
 
 angular.module('RapidLog').controller('DailyCtrl', DailyCtrl); 
 
-function DailyCtrl( dailyService, $mdSidenav) {
+function DailyCtrl( dailyService, weatherService, $mdSidenav, $q) {
 	var self = this;
 	
+	// fields
 	self.selectedDay = null;
 	self.selectedModule = null;
+	self.selectedDate = new Date();
+	self.dayRecords = [];
+	
+	// methods
+	self.hasDayRecord = hasDayRecord;
 	self.selectModule = selectModule;
 	self.loadDay = loadDay;
-	self.selectedDate = new Date();
-	self.hasDayRecord = hasDayRecord;
-	self.dayRecords = [];
+	self.getForecast = getForecast;
 
 	dailyService.getDayRecordsDates(function(result) {
 		self.dayRecords = [];
@@ -24,8 +28,19 @@ function DailyCtrl( dailyService, $mdSidenav) {
 	});
 
 	function selectModule(moduleName) {
-		self.selectedModule = self.selectedDay[moduleName];
-		console.log(JSON.stringify(self.selectedModule));
+		if (moduleName == "weather") {
+			getForecast(function(result) {
+				self.selectedDay[moduleName].length = 0;
+				for (var r in result) {
+					self.selectedDay[moduleName].push(result[r]);
+				}
+				self.selectedModule = self.selectedDay[moduleName];
+				console.log(JSON.stringify(self.selectedModule));
+			})
+		} else {
+			self.selectedModule = self.selectedDay[moduleName];
+			console.log(JSON.stringify(self.selectedModule));
+		}
 	}
 	
 	function loadDay() {
@@ -39,6 +54,22 @@ function DailyCtrl( dailyService, $mdSidenav) {
 		return self.dayRecords.indexOf(dateAsId) >= 0;
 	}
 	
+	function getForecast(callback) {
+		if (self.selectedDay['weather'].length > 0) {
+			callback(self.selectedDay['weather']);
+		} else {
+			weatherService.getForecast(function(err, result) {
+				if (err) {
+					callback([{
+						bullet: "err",
+						short: err
+					}]);
+				} else {
+					callback(result);
+				}
+			});			
+		}
+	}
 }
 
 })();
