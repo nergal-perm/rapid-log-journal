@@ -42,7 +42,8 @@ function weatherService() {
 
   this.getForecast = function(callback) {
     var api_key = conf.get('weatherAPI');
-    process.env.http_proxy = conf.get('workProxy');
+    //process.env.http_proxy = conf.get('workProxy');
+    console.log("Weather api key: " + api_key);
     request.get({
       uri: 'http://api.wunderground.com/api/' + api_key + '/forecast/lang:RU/q/uspp.json',
       headers: {'Accept': 'application/json'}
@@ -50,6 +51,7 @@ function weatherService() {
       if (err) {
         callback(err);  
       } else {
+        console.log(body);
         var forecast = JSON.parse(body);
         var fc_day = forecast.forecast.txt_forecast.forecastday[0];
         var fc_night = forecast.forecast.txt_forecast.forecastday[1];
@@ -62,6 +64,7 @@ function weatherService() {
           bullet: fc_night.title,
           short: fc_night.fcttext_metric
         });
+        console.log('Got weather data, transferring to callback');
         callback(null, result);
       }
     }); 

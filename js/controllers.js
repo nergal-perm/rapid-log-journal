@@ -4,11 +4,11 @@
 
 angular.module('RapidLog').controller('DailyCtrl', DailyCtrl); 
 
-function DailyCtrl( dailyService, weatherService, $mdSidenav, $q) {
+function DailyCtrl( dailyService, weatherService, $mdSidenav, $q, $scope) {
 	var self = this;
 	
 	// fields
-	self.selectedDay = null;
+	self.selectedDay = {};
 	self.selectedModule = null;
 	self.selectedDate = new Date();
 	self.dayRecords = [];
@@ -29,17 +29,20 @@ function DailyCtrl( dailyService, weatherService, $mdSidenav, $q) {
 
 	function selectModule(moduleName) {
 		if (moduleName == "weather") {
+			if (!self.selectedDay['weather']) {
+				self.selectedDay['weather'] = [];
+			}
 			getForecast(function(result) {
 				self.selectedDay[moduleName].length = 0;
-				for (var r in result) {
-					self.selectedDay[moduleName].push(result[r]);
-				}
-				self.selectedModule = self.selectedDay[moduleName];
-				console.log(JSON.stringify(self.selectedModule));
+				$scope.$apply(function () {
+					for (var r in result) {
+						self.selectedDay[moduleName].push(result[r]);
+					}
+					self.selectedModule = self.selectedDay[moduleName];					
+				})
 			})
 		} else {
 			self.selectedModule = self.selectedDay[moduleName];
-			console.log(JSON.stringify(self.selectedModule));
 		}
 	}
 	
