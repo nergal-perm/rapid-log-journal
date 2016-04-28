@@ -39,35 +39,40 @@
 
 			<md-list>
 				<md-list-item ng-repeat="section in dc.selectedDay.sections">
-					<md-button ng-click="dc.setSection(section.type);">{{section.name}}</md-button>
+					<md-button ng-click="dc.setSection(section.type);" 
+						ng-class="{'md-primary':section.type == dc.selectedSection}">
+						{{section.name}}
+					</md-button>
+				</md-list-item>
+				<md-list-item>
+					<md-input-container ng-hide="dc.availableSections.length == 0">
+						<md-select ng-model="dc.sectionToAdd" md-on-close="dc.addSection()" placeholder="Добавить раздел">
+							<md-option ng-value="section.type" ng-repeat="section in dc.availableSections">{{section.name}}</md-option>
+						</md-select>
+					</md-input-container>
 				</md-list-item>
 			</md-list>
-
-			<md-fab-speed-dial md-direction="up" class="md-fling md-fab-bottom-left" layout-align="end">
-			  <md-fab-trigger>
-			    <md-button aria-label="Add..." class="md-fab md-warn">
-			    	<md-icon>add</md-icon>
-			    </md-button>
-			  </md-fab-trigger>
-			  <md-fab-actions>
-			    <md-button aria-label="Add Day" class="md-raised md-mini md-fab">
-			    	<md-icon>today</md-icon>
-			    	<md-tooltip md-direction="right" md-visible="tooltipVisible">День</md-tooltip>
-		    	</md-button>
-			    <md-button aria-label="Add Section"class="md-raised md-mini md-fab">
-			    	<md-icon>dns</md-icon>
-			    	<md-tooltip md-direction="right" md-visible="tooltipVisible">Раздел</md-tooltip>
-		    	</md-button>
-			  </md-fab-actions>
-			</md-fab-speed-dial>
-
-
 		</md-sidenav>
 
 		<md-content id="content" flex>
 			<md-list>
 				<md-list-item ng-repeat="record in dc.selectedDay.rows | filter: dc.selectedSection">
 					{{record.bullet}} : {{record.short}}
+				</md-list-item>
+				<md-list-item>
+				    <form layout="row" name="recordForm" flex ng-submit="dc.addRecord();" >
+					<md-input-container>
+			      		<label>Метка</label>
+				        <input ng-model="bullet" name="bullet" required>
+				    </md-input-container>
+				    <md-input-container flex="75">
+				        <label>Краткое описание</label>
+				        <input ng-model="short" name="short" required>
+				    </md-input-container>
+				    <md-button type="submit">
+				    	<md-icon>add</md-icon>
+				    </md-button>
+					</form>
 				</md-list-item>
 			</md-list>	
 		</md-content>
