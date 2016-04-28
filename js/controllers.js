@@ -19,12 +19,16 @@ function DailyCtrl( fakeDataService, $mdDialog, $scope ) {
 	this.sectionToAdd = '';
 
 	this.addSection = function() {
+		if (!this.sectionToAdd) {
+			return;
+		}
 		var removeIndex = this.availableSections.map(function(item) {
 			return item.type;
 		}).indexOf(this.sectionToAdd);
 
 		this.selectedDay.sections.push(~removeIndex && this.availableSections.splice(removeIndex, 1)[0]);
 		this.setSection(this.sectionToAdd);
+		this.sectionToAdd = '';
 	}
 
 	this.addRecord = function() {
