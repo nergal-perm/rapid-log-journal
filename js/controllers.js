@@ -9,7 +9,6 @@ function DailyCtrl( fakeDataService, $mdDialog, $scope ) {
 	
 	this.dayRecords = fakeDataService.dayRecords;
 	this.selectedDay = this.dayRecords[0];
-	this.selDate = Date.parse(this.selectedDay._id);
 	this.selectedSection = 'overview';
 	this.setSection = function(sectionType) {
 		this.selectedSection = sectionType;
