@@ -10,17 +10,26 @@ function DailyCtrl( fakeDataService, $mdDialog, $scope ) {
 	this.dayRecords = fakeDataService.dayRecords;
 	this.selectedDay = this.dayRecords[0];
 	this.selectedSection = 'overview';
+	this.availableSections = fakeDataService.availableSections;
+	this.sectionToAdd = '';
+
+	/*
+	 *
+	 */
 	this.setSection = function(sectionType) {
 		this.selectedSection = sectionType;
 	}
 
-	this.availableSections = fakeDataService.availableSections;
-	this.sectionToAdd = '';
-
+	/* Добавляет новую секцию в запись текущего дня. Выбранная секция
+	 * удаляется из списка доступных для выбора секций, чтобы не было
+	 * возможности добавить дважды одну и ту же секцию.
+	 */
 	this.addSection = function() {
+		// Должна быть явно указана добавляемая секция
 		if (!this.sectionToAdd) {
 			return;
 		}
+		
 		var removeIndex = this.availableSections.map(function(item) {
 			return item.type;
 		}).indexOf(this.sectionToAdd);
