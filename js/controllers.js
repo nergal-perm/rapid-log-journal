@@ -9,6 +9,7 @@ function DailyCtrl( fakeDataService, $mdDialog, $scope ) {
 	
 	this.dayRecords = fakeDataService.dayRecords;
 	this.selectedDay = this.dayRecords[0];
+	this.selectedDate = '';
 	this.selectedSection = 'overview';
 	this.availableSections = fakeDataService.availableSections;
 	this.sectionToAdd = '';
@@ -42,11 +43,11 @@ function DailyCtrl( fakeDataService, $mdDialog, $scope ) {
 	this.addRecord = function() {
 		var record = {
 			type: this.selectedSection,
-			bullet: $scope.bullet,
+			marker: $scope.marker,
 			short: $scope.short
 		};
 		this.selectedDay.rows.push(record);
-		$scope.bullet = '';
+		$scope.marker = '';
 		$scope.short = '';
 	}
 

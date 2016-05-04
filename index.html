@@ -22,7 +22,7 @@
 				<h3 class="md-toolbar-tools">Период</h3>
 			</md-toolbar>
 			
-			<md-datepicker md-placeholder="Введите дату"></md-datepicker>
+			<md-datepicker md-placeholder="Введите дату" ng-model="dc.selectedDate"></md-datepicker>
 			
 			<md-toolbar>
 				<h3 class="md-toolbar-tools">Разделы дневника</h3>
@@ -47,14 +47,14 @@
 
 		<md-content id="content" flex>
 			<md-list>
-				<md-list-item ng-repeat="record in dc.selectedDay.rows | filter: dc.selectedSection">
-					{{record.bullet}} : {{record.short}}
+				<md-list-item ng-repeat="record in dc.selectedDay.rows | filter: dc.selectedSection | orderBy: 'marker'">
+					{{record.marker}} : {{record.short}}
 				</md-list-item>
 				<md-list-item>
 				    <form layout="row" name="recordForm" flex ng-submit="dc.addRecord();" >
 					<md-input-container>
-			      		<label>Метка</label>
-				        <input ng-model="bullet" name="bullet" required>
+			      		<label>Маркер</label>
+				        <input ng-model="marker" name="marker" required>
 				    </md-input-container>
 				    <md-input-container flex="75">
 				        <label>Краткое описание</label>
