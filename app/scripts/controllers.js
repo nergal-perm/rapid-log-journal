@@ -2,16 +2,12 @@
 
 'use strict';
 
-angular.module('RapidLog').controller('DailyCtrl', DailyCtrl); 
-
-function DailyCtrl( fakeDataService, $mdDialog, $scope ) {
-	var self = this;
-	
-	this.dayRecords = fakeDataService.dayRecords;
+var DailyCtrl = function( fakeDataService, $mdDialog, $scope ) {
+	this.dayRecords = fakeDataService.getDayRecords;
 	this.selectedDay = this.dayRecords[0];
 	this.selectedDate = '';
 	this.selectedSection = 'overview';
-	this.availableSections = fakeDataService.availableSections;
+	this.availableSections = fakeDataService.getAvailableSections;
 	this.sectionToAdd = '';
 
 	/*
@@ -19,7 +15,7 @@ function DailyCtrl( fakeDataService, $mdDialog, $scope ) {
 	 */
 	this.setSection = function(sectionType) {
 		this.selectedSection = sectionType;
-	}
+	};
 
 	/* Добавляет новую секцию в запись текущего дня. Выбранная секция
 	 * удаляется из списка доступных для выбора секций, чтобы не было
@@ -35,10 +31,10 @@ function DailyCtrl( fakeDataService, $mdDialog, $scope ) {
 			return item.type;
 		}).indexOf(this.sectionToAdd);
 
-		this.selectedDay.sections.push(~removeIndex && this.availableSections.splice(removeIndex, 1)[0]);
+		this.selectedDay.sections.push((removeIndex > -1) && this.availableSections.splice(removeIndex, 1)[0]);
 		this.setSection(this.sectionToAdd);
 		this.sectionToAdd = '';
-	}
+	};
 
 	this.addRecord = function() {
 		var record = {
@@ -49,9 +45,11 @@ function DailyCtrl( fakeDataService, $mdDialog, $scope ) {
 		this.selectedDay.rows.push(record);
 		$scope.marker = '';
 		$scope.short = '';
-	}
+	};
 
-} // DailyCtrl
+}; // DailyCtrl
+
+angular.module('MyApp').controller('dailyCtrl', DailyCtrl); 
 
 })();
 

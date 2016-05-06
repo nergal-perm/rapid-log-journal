@@ -1,12 +1,9 @@
 (function(){
-  'use strict';
 
-  angular.module('RapidLog')
-    .service('fakeDataService', dataService);
+'use strict';
 
-
-  function dataService() {
-    this.dayRecords = [{
+function DataService() {
+    this.getDayRecords = [{
       _id: "2016-04-27",
       sections: [
       {
@@ -26,7 +23,7 @@
       }]
     }];
 
-    this.availableSections = [
+    this.getAvailableSections = [
     {
       type: "plan",
       name: "Задачи"
@@ -43,7 +40,9 @@
       type: "chronodex",
       name: "Хронодекс"
     }
-    ]
+    ];
+}
 
-  };
+angular.module('MyApp').service('fakeDataService', DataService);  
+
 })();
