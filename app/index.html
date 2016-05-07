@@ -16,32 +16,32 @@
 
 <body ng-app="MyApp" layout="column">
 	<md-toolbar>
-		<h1>Rapid log journal</h1>
+		<h1>Электронный дневник</h1>
 	</md-toolbar>
 	
-	<div class="container" layout="row" flex="100" ng-controller="dailyCtrl as dc">
+	<div class="container" layout="row" flex="100" ng-controller="DailyCtrl">
 		<md-sidenav md-is-locked-open="true" class="md-whiteframe-4dp">
 			<md-toolbar>
 				<h3 class="md-toolbar-tools">Период</h3>
 			</md-toolbar>
 			
-			<md-datepicker md-placeholder="Введите дату" ng-model="dc.selectedDate"></md-datepicker>
+			<md-datepicker md-placeholder="Введите дату" ng-model="selectedDate"></md-datepicker>
 			
 			<md-toolbar>
 				<h3 class="md-toolbar-tools">Разделы дневника</h3>
 			</md-toolbar>
 
 			<md-list>
-				<md-list-item ng-repeat="section in dc.selectedDay.sections">
-					<md-button ng-click="dc.setSection(section.type);" 
-						ng-class="{'md-primary':section.type == dc.selectedSection}">
+				<md-list-item ng-repeat="section in selectedDay.sections">
+					<md-button ng-click="setSection(section.type);" 
+						ng-class="{'md-primary':section.type == selectedSection}">
 						{{section.name}}
 					</md-button>
 				</md-list-item>
 				<md-list-item>
-					<md-input-container ng-hide="dc.availableSections.length == 0">
-						<md-select ng-model="dc.sectionToAdd" md-on-close="dc.addSection()" placeholder="Добавить раздел">
-							<md-option ng-value="section.type" ng-repeat="section in dc.availableSections">{{section.name}}</md-option>
+					<md-input-container ng-hide="availableSections.length == 0">
+						<md-select ng-model="sectionToAdd" md-on-close="addSection()" placeholder="Добавить раздел">
+							<md-option ng-value="section.type" ng-repeat="section in availableSections">{{section.name}}</md-option>
 						</md-select>
 					</md-input-container>
 				</md-list-item>
@@ -50,11 +50,11 @@
 
 		<md-content id="content" flex>
 			<md-list>
-				<md-list-item ng-repeat="record in dc.selectedDay.rows | filter: dc.selectedSection | orderBy: 'marker'">
+				<md-list-item ng-repeat="record in selectedDay.rows | filter: selectedSection | orderBy: 'marker'">
 					{{record.marker}} : {{record.short}}
 				</md-list-item>
 				<md-list-item>
-				    <form layout="row" name="recordForm" flex ng-submit="dc.addRecord();" >
+				    <form layout="row" name="recordForm" flex ng-submit="addRecord();" >
 					<md-input-container>
 			      		<label>Маркер</label>
 				        <input ng-model="marker" name="marker" required>

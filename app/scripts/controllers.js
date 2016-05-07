@@ -2,54 +2,54 @@
 
 'use strict';
 
-var DailyCtrl = function( fakeDataService, $mdDialog, $scope ) {
-	this.dayRecords = fakeDataService.getDayRecords;
-	this.selectedDay = this.dayRecords[0];
-	this.selectedDate = '';
-	this.selectedSection = 'overview';
-	this.availableSections = fakeDataService.getAvailableSections;
-	this.sectionToAdd = '';
+angular.module('MyApp')
+	.controller('DailyCtrl', ['fakeDataService', '$mdDialog', '$scope', 
+		function( fakeDataService, $mdDialog, $scope ) {
+	$scope.dayRecords = fakeDataService.getDayRecords;
+	$scope.selectedDay = $scope.dayRecords[0];
+	$scope.selectedDate = '';
+	$scope.selectedSection = 'overview';
+	$scope.availableSections = fakeDataService.getAvailableSections;
+	$scope.sectionToAdd = '';
 
 	/*
 	 *
 	 */
-	this.setSection = function(sectionType) {
-		this.selectedSection = sectionType;
+	$scope.setSection = function(sectionType) {
+		$scope.selectedSection = sectionType;
 	};
 
 	/* Добавляет новую секцию в запись текущего дня. Выбранная секция
 	 * удаляется из списка доступных для выбора секций, чтобы не было
 	 * возможности добавить дважды одну и ту же секцию.
 	 */
-	this.addSection = function() {
+	$scope.addSection = function() {
 		// Должна быть явно указана добавляемая секция
-		if (!this.sectionToAdd) {
+		if (!$scope.sectionToAdd) {
 			return;
 		}
 		
-		var removeIndex = this.availableSections.map(function(item) {
+		var removeIndex = $scope.availableSections.map(function(item) {
 			return item.type;
-		}).indexOf(this.sectionToAdd);
+		}).indexOf($scope.sectionToAdd);
 
-		this.selectedDay.sections.push((removeIndex > -1) && this.availableSections.splice(removeIndex, 1)[0]);
-		this.setSection(this.sectionToAdd);
-		this.sectionToAdd = '';
+		$scope.selectedDay.sections.push((removeIndex > -1) && $scope.availableSections.splice(removeIndex, 1)[0]);
+		$scope.setSection($scope.sectionToAdd);
+		$scope.sectionToAdd = '';
 	};
 
-	this.addRecord = function() {
+	$scope.addRecord = function() {
 		var record = {
-			type: this.selectedSection,
+			type: $scope.selectedSection,
 			marker: $scope.marker,
 			short: $scope.short
 		};
-		this.selectedDay.rows.push(record);
+		$scope.selectedDay.rows.push(record);
 		$scope.marker = '';
 		$scope.short = '';
 	};
 
-}; // DailyCtrl
-
-angular.module('MyApp').controller('dailyCtrl', DailyCtrl); 
+}]);
 
 })();
 
