@@ -54,7 +54,7 @@
 					{{record.marker}} : {{record.short}}
 				</md-list-item>
 				<md-list-item>
-				    <form layout="row" name="recordForm" flex ng-submit="addRecord();" >
+				    <form layout="row" name="recordForm" flex ng-submit="addRecord();" novalidate >
 					<md-input-container>
 			      		<label>Маркер</label>
 				        <input ng-model="marker" name="marker" required>
