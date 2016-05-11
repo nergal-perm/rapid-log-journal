@@ -17,6 +17,7 @@ angular.module('MyApp')
 	 */
 	$scope.setSection = function(sectionType) {
 		$scope.selectedSection = sectionType;
+		console.log($scope.selectedSection.markers);
 	};
 
 	/* Добавляет новую секцию в запись текущего дня. Выбранная секция
@@ -38,18 +39,23 @@ angular.module('MyApp')
 		$scope.sectionToAdd = '';
 	};
 
-	$scope.addRecord = function() {
-		var record = {
-			type: $scope.selectedSection,
-			marker: $scope.marker,
-			short: $scope.short
-		};
-		$scope.selectedDay.rows.push(record);
-		$scope.marker = '';
-		$scope.short = '';
-	};
+	}])
 
-}]);
+	.controller('RecordController', ['$scope', function($scope) {
+		$scope.addRecord = function() {
+			var record = {
+				type: $scope.selectedSection,
+				marker: $scope.marker,
+				short: $scope.short
+			};
+			$scope.selectedDay.rows.push(record);
+			
+			$scope.marker = '';
+			$scope.short = '';				
+			$scope.recordForm.$setPristine();
+			$scope.recordForm.$setUntouched();
+		};
+	}]);
 
 })();
 

@@ -53,17 +53,19 @@
 				<md-list-item ng-repeat="record in selectedDay.rows | filter: selectedSection | orderBy: 'marker'">
 					{{record.marker}} : {{record.short}}
 				</md-list-item>
-				<md-list-item>
-				    <form layout="row" name="recordForm" flex ng-submit="addRecord();" novalidate >
+				<md-list-item ng-controller="RecordController">
+				    <form layout="row" name="recordForm" flex ng-submit="addRecord();" novalidate>
 					<md-input-container>
 			      		<label>Маркер</label>
-				        <input ng-model="marker" name="marker" required>
+				        <select ng-model="marker" name="marker" ng-options="m.marker as m.marker for m in selectedSection.markers" required>
+				        	
+				        </select>
 				    </md-input-container>
 				    <md-input-container flex="75">
 				        <label>Краткое описание</label>
 				        <input ng-model="short" name="short" required>
 				    </md-input-container>
-				    <md-button type="submit">
+				    <md-button type="submit" ng-show="recordForm.$valid">
 				    	<md-icon>add</md-icon>
 				    </md-button>
 					</form>

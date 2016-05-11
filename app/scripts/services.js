@@ -26,21 +26,61 @@ function DataService() {
     this.getAvailableSections = [
     {
       type: "plan",
-      name: "Задачи"
+      name: "Задачи",
+      markers: [{
+        marker: 'A',
+        order: 1,
+        unique: false
+      },
+      {
+        marker: 'B',
+        order: 2,
+        unique: false
+      },
+      {
+        marker: 'C',
+        order: 3,
+        unique: false
+      }]
     },
     {
       type: "food",
-      name: "Питание"
+      name: "Питание",
+      markers: [{
+        marker: 'З',
+        order: 1,
+        unique: true
+      },
+      {
+        marker: 'О',
+        order: 2,
+        unique: true
+      },
+      {
+        marker: 'У',
+        order: 3,
+        unique: true
+      },
+      {
+        marker: 'П',
+        order: 4,
+        unique: true
+      }]
     },
     {
       type: "diary",
-      name: "Дневник"
-    },
-    {
-      type: "chronodex",
-      name: "Хронодекс"
-    }
-    ];
+      name: "Дневник",
+      markers: [{
+        marker: 'Событие',
+        order: 0,
+        unique: false
+      },
+      {
+        marker: 'Инфо',
+        order: 0,
+        unique: false
+      }]
+    }];
 }
 
 angular.module('MyApp').service('fakeDataService', DataService);  
