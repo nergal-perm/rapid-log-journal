@@ -17,7 +17,10 @@ angular.module('MyApp')
 	 */
 	$scope.setSection = function(sectionType) {
 		$scope.selectedSection = sectionType;
-		console.log($scope.selectedSection.markers);
+		var index = $scope.selectedDay.sections.map(function(item) {
+			return item.type;
+		}).indexOf(sectionType);
+		$scope.markers = $scope.selectedDay.sections[index].markers;
 	};
 
 	/* Добавляет новую секцию в запись текущего дня. Выбранная секция

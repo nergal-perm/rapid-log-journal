@@ -57,9 +57,9 @@
 				    <form layout="row" name="recordForm" flex ng-submit="addRecord();" novalidate>
 					<md-input-container>
 			      		<label>Маркер</label>
-				        <select ng-model="marker" name="marker" ng-options="m.marker as m.marker for m in selectedSection.markers" required>
-				        	
-				        </select>
+				        <md-select ng-model="marker" name="marker" required>
+				        	<md-option ng-repeat="m in markers" value="{{m.marker}}">{{m.marker}}</md-option>
+				        </md-select>
 				    </md-input-container>
 				    <md-input-container flex="75">
 				        <label>Краткое описание</label>
