@@ -13,12 +13,22 @@ function DataService() {
       rows: [
       {
         type: "overview",
-        marker: "Д",
+        marker: {
+          symbol: "Д",
+          order: 1,
+          unique: true,
+          style: 'default'
+        },
         short: "Значительная облачность. Повышение 12C. Ветер ВСВ от 10 до 15 км/ч."
       },
       {
         type: "overview",
-        marker: "Н",
+        marker: {
+          symbol: "Н",
+          order: 1,
+          unique: true,
+          style: 'default'
+        },
         short: "Переменная облачность. Понижение 0C. Ветер СВ от 10 до 15 км/ч."
       }]
     }];
@@ -28,57 +38,73 @@ function DataService() {
       type: "plan",
       name: "Задачи",
       markers: [{
-        marker: 'A',
+        symbol: 'A',
         order: 1,
-        unique: false
+        unique: false,
+        style: 'danger'
       },
       {
-        marker: 'B',
+        symbol: 'B',
         order: 2,
-        unique: false
+        unique: false,
+        style: 'warning'
       },
       {
-        marker: 'C',
+        symbol: 'C',
         order: 3,
-        unique: false
-      }]
+        unique: false,
+        style: 'success'
+      },
+      {
+        symbol: 'D',
+        order: 4,
+        unique: false,
+        style: 'default'
+      }
+      ]
     },
     {
       type: "food",
       name: "Питание",
       markers: [{
-        marker: 'З',
+        symbol: 'З',
         order: 1,
-        unique: true
+        unique: true,
+        style: 'info'
       },
       {
-        marker: 'О',
+        symbol: 'О',
         order: 2,
-        unique: true
+        unique: true,
+        style: 'info'
       },
       {
-        marker: 'У',
+        symbol: 'У',
         order: 3,
-        unique: true
+        unique: true,
+        style: 'info'
       },
       {
-        marker: 'П',
+        symbol: 'П',
         order: 4,
-        unique: true
+        unique: true,
+        style: 'info'
       }]
     },
     {
       type: "diary",
       name: "Дневник",
       markers: [{
-        marker: 'Событие',
+        symbol: 'Событие',
         order: 0,
-        unique: false
+        unique: false,
+        style: 'warning'
       },
       {
-        marker: 'Инфо',
+        symbol: 'Инфо',
         order: 0,
-        unique: false
+        unique: false,
+        style: 'info'
       }]
     }];
 }

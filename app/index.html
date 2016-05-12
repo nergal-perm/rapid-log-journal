@@ -6,7 +6,7 @@
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- build:css styles/main.css -->	
-	<link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css" />
+	<link rel="stylesheet" href="../bower_components/angular-material/angular-material.css" />
 	<link rel="stylesheet" href="styles/mystyles.css" />
 <!-- endbuild -->	
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
@@ -19,7 +19,7 @@
 		<h1>Электронный дневник</h1>
 	</md-toolbar>
 	
-	<div class="container" layout="row" flex="100" ng-controller="DailyCtrl">
+	<div layout="row" flex="100" ng-controller="DailyCtrl">
 		<md-sidenav md-is-locked-open="true" class="md-whiteframe-4dp">
 			<md-toolbar>
 				<h3 class="md-toolbar-tools">Период</h3>
@@ -50,15 +50,20 @@
 
 		<md-content id="content" flex>
 			<md-list>
-				<md-list-item ng-repeat="record in selectedDay.rows | filter: selectedSection | orderBy: 'marker'">
-					{{record.marker}} : {{record.short}}
+				<md-list-item ng-repeat="record in selectedDay.rows | filter: selectedSection | orderBy: 'marker.symbol'">
+					<div class="record" ng-click="editDetails(record)" layout="row">
+						<div class="marker {{record.marker.style}}">
+							{{record.marker.symbol}}
+						</div>
+						<div>{{record.short}}</div>
+					</div>
 				</md-list-item>
 				<md-list-item ng-controller="RecordController">
 				    <form layout="row" name="recordForm" flex ng-submit="addRecord();" novalidate>
 					<md-input-container>
 			      		<label>Маркер</label>
 				        <md-select ng-model="marker" name="marker" required>
-				        	<md-option ng-repeat="m in markers" value="{{m.marker}}">{{m.marker}}</md-option>
+				        	<md-option ng-repeat="m in markers" value="{{m.symbol}}">{{m.symbol}}</md-option>
 				        </md-select>
 				    </md-input-container>
 				    <md-input-container flex="75">

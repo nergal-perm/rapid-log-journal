@@ -1,0 +1,13 @@
+<md-bottom-sheet class="md-list md-has-header" layout="column">
+	<md-subheader>Детальная информация</md-subheader>
+	<md-list>
+		<md-list-item>
+			<md-input-container flex="100">
+				<label>Кратко:</label>
+				<input ng-model="detCtrl.record.short" />
+			</md-input-container>
+		</md-list-item>
+	</md-list>
+
+	<md-button ng-click="detCtrl.save()">Close</md-button>
+</md-bottom-sheet>

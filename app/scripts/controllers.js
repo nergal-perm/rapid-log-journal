@@ -3,8 +3,8 @@
 'use strict';
 
 angular.module('MyApp')
-	.controller('DailyCtrl', ['fakeDataService', '$mdDialog', '$scope', 
-		function( fakeDataService, $mdDialog, $scope ) {
+	.controller('DailyCtrl', ['fakeDataService', '$scope', '$mdBottomSheet',
+		function( fakeDataService, $scope, $mdBottomSheet ) {
 	$scope.dayRecords = fakeDataService.getDayRecords;
 	$scope.selectedDay = $scope.dayRecords[0];
 	$scope.selectedDate = '';
@@ -42,15 +42,40 @@ angular.module('MyApp')
 		$scope.sectionToAdd = '';
 	};
 
+	$scope.editDetails = function(record) {
+
+		function DetailsController() {
+			this.record = record;
+			this.save = function() {
+				$mdBottomSheet.hide();
+			};
+		}
+
+		$mdBottomSheet.show({
+			controller: DetailsController,
+			controllerAs: 'detCtrl',
+			templateUrl: './bottomsheet.html',
+			parent: angular.element(document.querySelector('#content'))
+		});
+
+	};
+
 	}])
 
 	.controller('RecordController', ['$scope', function($scope) {
 		$scope.addRecord = function() {
+			var index = $scope.markers.map(function(item) {
+				return item.symbol;
+			}).indexOf($scope.marker);
+			console.log($scope.marker + ' index: ' + index);
+
+
 			var record = {
 				type: $scope.selectedSection,
-				marker: $scope.marker,
+				marker: $scope.markers[index],
 				short: $scope.short
 			};
+
 			$scope.selectedDay.rows.push(record);
 			
 			$scope.marker = '';
