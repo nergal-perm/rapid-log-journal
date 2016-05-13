@@ -61,6 +61,19 @@ function DataService() {
         unique: false,
         style: 'default'
       }
+      ],
+      tags: [{
+        name:'Работа',
+        type:'Сфера'
+      },
+      {
+        name:'Досуг',
+        type:'Сфера'
+      },
+      {
+        name:'Важно',
+        type:'!'
+      }
       ]
     },
     {

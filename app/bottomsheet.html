@@ -1,13 +1,54 @@
 <md-bottom-sheet class="md-list md-has-header" layout="column">
 	<md-subheader>Детальная информация</md-subheader>
-	<md-list>
-		<md-list-item>
-			<md-input-container flex="100">
-				<label>Кратко:</label>
-				<input ng-model="detCtrl.record.short" />
-			</md-input-container>
-		</md-list-item>
-	</md-list>
+	<div layout="column" flex>
+		<div layout="row" flex layout-align="start start">
+		<md-input-container>
+      		<label>Маркер</label>
+	        <md-select ng-model="detCtrl.record.marker" ng-model-options="{trackBy: '$value.symbol'}" name="marker" required>
+	        	<md-option ng-repeat="m in detCtrl.markers" ng-value="m">{{m.symbol}}</md-option>
+	        </md-select>
+	    </md-input-container>
+	    <md-input-container flex="75">
+	        <label>Краткое описание</label>
+	        <input ng-model="detCtrl.record.short" name="short" required>
+	    </md-input-container>		
+	    </div>
 
+		<div layout="row" flex>
+			<md-input-container flex="100">
+				<label>Метки:</label>
+				<md-chips ng-model="detCtrl.record.tags" md-transform-chip="detCtrl.transformTag($chip)" md-require-match="true" md-autocomplete-snap>
+					<md-autocomplete
+						md-selected-item="detCtrl.selectedTag"
+						md-search-text="detCtrl.searchText"
+						md-items="item in detCtrl.querySearch(detCtrl.searchText)"
+						md-item-text="item.name">
+						<span md-highlight-txt="detCtrl.searchText">{{item.name}} :: {{item.type}}</span>
+					</md-autocomplete>
+					<md-chip-template>
+						<span>
+							<strong>{{$chip.name}}</strong>
+							<em>({{$chip.type}})</em>
+						</span>
+					</md-chip-template>
+				</md-chips>	
+			</md-input-container>
+		</div>
+
+		<div layout="row" flex> 
+			<md-input-container flex="100">
+				<label>Подробно:</label>
+				<textarea ng-model="detCtrl.record.long" md-maxlength="1000" rows="5" md-select-on-focus></textarea>
+			</md-input-container>
+		</div>
+
+		<div layout="row" flex>
+			<md-input-container flex="100">
+				<label>Ссылка Evernote</label>
+				<input ng-model="detCtrl.record.evernoteLink" />
+			</md-input-container>
+		</div>
+	</div>	
+	
 	<md-button ng-click="detCtrl.save()">Close</md-button>
 </md-bottom-sheet>
