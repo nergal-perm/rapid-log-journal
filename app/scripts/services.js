@@ -3,7 +3,7 @@
 'use strict';
 
 function DataService() {
-    this.getDayRecords = [{
+  this.getDayRecords = [{
       _id: "2016-04-27",
       sections: [
       {
@@ -31,7 +31,43 @@ function DataService() {
         },
         short: "Переменная облачность. Понижение 0C. Ветер СВ от 10 до 15 км/ч."
       }]
+    },{
+      _id: "2016-04-28",
+      sections: [
+      {
+        type: "overview",
+        name: "Обзор"
+      }],
+      rows: [
+      {
+        type: "overview",
+        marker: {
+          symbol: "Д",
+          order: 1,
+          unique: true,
+          style: 'default'
+        },
+        short: "Плохая погода"
+      },
+      {
+        type: "overview",
+        marker: {
+          symbol: "Н",
+          order: 1,
+          unique: true,
+          style: 'default'
+        },
+        short: "Хорошая погода"
+      }]
     }];
+
+
+    this.getDayById = function(id) {
+      var found = this.getDayRecords.filter(function(item) {
+          return item._id === id;
+        });
+      return found.length === 1 ? found[0] : {};
+    };
 
     this.getAvailableSections = [
     {

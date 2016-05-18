@@ -3,8 +3,8 @@
 'use strict';
 
 angular.module('MyApp')
-	.controller('DailyCtrl', ['fakeDataService', '$scope', '$mdBottomSheet', '$location',
-		function( fakeDataService, $scope, $mdBottomSheet, $location ) {
+	.controller('DailyCtrl', ['fakeDataService', '$scope', '$mdBottomSheet', '$location', '$stateParams',
+		function( fakeDataService, $scope, $mdBottomSheet, $location, $stateParams ) {
 
 	$scope.dayRecords = fakeDataService.getDayRecords;
 	$scope.availableSections = fakeDataService.getAvailableSections;
@@ -12,7 +12,7 @@ angular.module('MyApp')
 	$scope.selections = {
 		selectedSection: 'overview'
 	};
-	$scope.selections.selectedDay = $scope.dayRecords[0];
+	$scope.selections.selectedDay = fakeDataService.getDayById(parseInt($stateParams.id), 10);
 
 	/*
 	 *
@@ -22,11 +22,14 @@ angular.module('MyApp')
 		$scope.markers = section.markers;
 	};
 
-	$scope.changeDay = function() {
-		console.log('Hello!');
+	$scope.changeDate = function() {
+		$scope.selections.selectedDate = 
+			new Date(Number($scope.selections.selectedDate) - 
+			$scope.selections.selectedDate.getTimezoneOffset() * 60000);
 		var s = $scope.selections.selectedDate;
 		$location.url('/day/' + s.getFullYear() + '-' +
-			s.getMonth() + '-' + s.getDate());
+			String('0' + (s.getMonth() + 1)).split('').slice(-2).join('') + '-' + s.getDate());
+		$scope.selections.selectedDay = fakeDataService.getDayById($stateParams.id);
 	};
 
 	/* Добавляет новую секцию в запись текущего дня. Выбранная секция
