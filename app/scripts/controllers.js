@@ -3,21 +3,30 @@
 'use strict';
 
 angular.module('MyApp')
-	.controller('DailyCtrl', ['fakeDataService', '$scope', '$mdBottomSheet',
-		function( fakeDataService, $scope, $mdBottomSheet ) {
+	.controller('DailyCtrl', ['fakeDataService', '$scope', '$mdBottomSheet', '$location',
+		function( fakeDataService, $scope, $mdBottomSheet, $location ) {
+
 	$scope.dayRecords = fakeDataService.getDayRecords;
-	$scope.selectedDay = $scope.dayRecords[0];
-	$scope.selectedDate = '';
-	$scope.selectedSection = 'overview';
 	$scope.availableSections = fakeDataService.getAvailableSections;
-	$scope.sectionToAdd = '';
+
+	$scope.selections = {
+		selectedSection: 'overview'
+	};
+	$scope.selections.selectedDay = $scope.dayRecords[0];
 
 	/*
 	 *
 	 */
 	$scope.setSection = function(section) {
-		$scope.selectedSection = section;
+		$scope.selections.selectedSection = section;
 		$scope.markers = section.markers;
+	};
+
+	$scope.changeDay = function() {
+		console.log('Hello!');
+		var s = $scope.selections.selectedDate;
+		$location.url('/day/' + s.getFullYear() + '-' +
+			s.getMonth() + '-' + s.getDate());
 	};
 
 	/* Добавляет новую секцию в запись текущего дня. Выбранная секция
@@ -26,17 +35,17 @@ angular.module('MyApp')
 	 */
 	$scope.addSection = function() {
 		// Должна быть явно указана добавляемая секция
-		if (!$scope.sectionToAdd) {
+		if (!$scope.selections.sectionToAdd) {
 			return;
 		}
 		
 		var removeIndex = $scope.availableSections.map(function(item) {
 			return item.type;
-		}).indexOf($scope.sectionToAdd);
+		}).indexOf($scope.selections.sectionToAdd);
 
 		var section = (removeIndex > -1) && $scope.availableSections.splice(removeIndex, 1)[0];
 		if (section) {
-			$scope.selectedDay.sections.push(section);
+			$scope.selections.selectedDay.sections.push(section);
 			$scope.setSection(section);			
 		}
 		$scope.sectionToAdd = '';
@@ -49,9 +58,9 @@ angular.module('MyApp')
 				var foundIndex = item.tags.map(function(tag) {
 					return tag.name;
 				}).indexOf('Важно');
-				match = foundIndex > -1;
+				match = (foundIndex > -1 && $scope.selections.selectedSection.type === 'overview');
 			}
-			var result = (item.type === $scope.selectedSection.type) || match;
+			var result = (item.type === $scope.selections.selectedSection.type) || match;
 			return result;
 		};
 	};
@@ -60,7 +69,7 @@ angular.module('MyApp')
 
 		function DetailsController() {
 			this.loadTags = function() {
-				var tags = $scope.selectedSection.tags;
+				var tags = $scope.selections.selectedSection.tags;
 				return tags.map(function(tag) {
 					tag._lowername = tag.name.toLowerCase();
 					tag._lowertype = tag.type.toLowerCase();
@@ -74,7 +83,7 @@ angular.module('MyApp')
 				record.tags = [];
 			}
 			this.tags = this.loadTags();
-			this.markers = $scope.selectedSection.markers;
+			this.markers = $scope.selections.selectedSection.markers;
 			this.save = function() {
 				$mdBottomSheet.hide();
 			};
@@ -96,7 +105,7 @@ angular.module('MyApp')
 				};
 			};
 		}
-
+		console.log('editing record:' + JSON.stringify(record));
 		$mdBottomSheet.show({
 			controller: DetailsController,
 			controllerAs: 'detCtrl',
@@ -116,12 +125,12 @@ angular.module('MyApp')
 			}).indexOf($scope.marker);
 
 			var record = {
-				type: $scope.selectedSection.type,
+				type: $scope.selections.selectedSection.type,
 				marker: $scope.markers[index],
 				short: $scope.short
 			};
 
-			$scope.selectedDay.rows.push(record);
+			$scope.selections.selectedDay.rows.push(record);
 			
 			$scope.marker = '';
 			$scope.short = '';				

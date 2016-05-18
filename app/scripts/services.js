@@ -102,6 +102,10 @@ function DataService() {
         order: 4,
         unique: true,
         style: 'info'
+      }],
+      tags: [{
+        name:'Важно',
+        type:'!'
       }]
     },
     {
@@ -118,6 +122,10 @@ function DataService() {
         order: 0,
         unique: false,
         style: 'info'
+      }],
+      tags: [{
+        name:'Важно',
+        type:'!'
       }]
     }];
 }

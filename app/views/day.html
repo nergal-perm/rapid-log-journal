@@ -1,0 +1,27 @@
+<md-list>
+	<md-list-item ng-repeat="record in selections.selectedDay.rows | filter: criteriaMatch() | orderBy: 'marker.symbol'">
+		<div class="record" ng-click="editDetails(record)" layout="row">
+			<div class="marker {{record.marker.style}}">
+				{{record.marker.symbol}}
+			</div>
+			<div>{{record.short}}</div>
+		</div>
+	</md-list-item>
+	<md-list-item ng-controller="RecordController">
+	    <form layout="row" name="recordForm" flex ng-submit="addRecord();" novalidate>
+		<md-input-container>
+      		<label>Маркер</label>
+	        <md-select ng-model="marker" name="marker" required>
+	        	<md-option ng-repeat="m in markers" value="{{m.symbol}}">{{m.symbol}}</md-option>
+	        </md-select>
+	    </md-input-container>
+	    <md-input-container flex="75">
+	        <label>Краткое описание</label>
+	        <input ng-model="short" name="short" required>
+	    </md-input-container>
+	    <md-button type="submit" ng-show="recordForm.$valid">
+	    	<md-icon>add</md-icon>
+	    </md-button>
+		</form>
+	</md-list-item>
+</md-list>	

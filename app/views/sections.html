@@ -1,0 +1,19 @@
+<md-toolbar>
+	<h3 class="md-toolbar-tools">Разделы дневника</h3>
+</md-toolbar>
+
+<md-list>
+	<md-list-item ng-repeat="section in selections.selectedDay.sections">
+		<md-button ng-click="setSection(section);" 
+			ng-class="{'md-primary':section.type == selections.selectedSection.type}">
+			{{section.name}}
+		</md-button>
+	</md-list-item>
+	<md-list-item>
+		<md-input-container ng-hide="availableSections.length == 0">
+			<md-select ng-model="selections.sectionToAdd" md-on-close="addSection()" placeholder="Добавить раздел">
+				<md-option ng-value="section.type" ng-repeat="section in availableSections">{{section.name}}</md-option>
+			</md-select>
+		</md-input-container>
+	</md-list-item>
+</md-list>

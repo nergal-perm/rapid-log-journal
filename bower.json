@@ -24,6 +24,7 @@
     "angular-messages": "^1.5.5",
     "angular-resource": "^1.5.3",
     "angular-route": "^1.5.3",
+    "angular-ui-router": "~0.3.0",
     "jquery": "^2.2.3",
     "pouchdb": "~5.3.1"
   },
