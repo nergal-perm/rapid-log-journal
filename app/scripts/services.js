@@ -30,6 +30,16 @@ function DataService() {
           style: 'default'
         },
         short: "Переменная облачность. Понижение 0C. Ветер СВ от 10 до 15 км/ч."
+      },
+      {
+        type: "plan",
+        marker: {
+          symbol: "A",
+          order: 1,
+          unique: true,
+          style: 'danger'
+        },
+        short: "Неважная задача"
       }]
     },{
       _id: "2016-04-28",
@@ -58,6 +68,20 @@ function DataService() {
           style: 'default'
         },
         short: "Хорошая погода"
+      },
+      {
+        type: "plan",
+        marker: {
+          symbol: "B",
+          order: 1,
+          unique: true,
+          style: "warning"
+        },
+        short: "Важная задача",
+        tags: [{
+          name:'Важно',
+          type:'!'
+        }]
       }]
     }];
 
@@ -66,7 +90,13 @@ function DataService() {
       var found = this.getDayRecords.filter(function(item) {
           return item._id === id;
         });
-      return found.length === 1 ? found[0] : {};
+      if (found.length > 0) {
+        console.log(found[0]);
+        return found[0];
+      } else {
+        console.log('Day ' + id + ' not found'); 
+        return {};
+      }
     };
 
     this.getAvailableSections = [

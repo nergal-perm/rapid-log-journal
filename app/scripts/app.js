@@ -11,7 +11,8 @@
 						templateUrl: 'views/header.html'
 					},
 					'sidePeriods': {
-						templateUrl: 'views/periods.html'
+						templateUrl: 'views/periods.html',
+						controller: 'PeriodsCtrl'
 					},
 					'sideSections': {
 						templateUrl: 'views/sections.html'
@@ -25,7 +26,12 @@
 				url: 'day/:id',
 				views: {
 					'content@': {
-						templateUrl: 'views/day.html'
+						templateUrl: 'views/day.html',
+						controller: 'DayCtrl'
+					},
+					'sideSections@': {
+						templateUrl: 'views/sections.html',
+						controller: 'DailySectionsCtrl'
 					}
 				}
 			});

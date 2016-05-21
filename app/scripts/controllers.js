@@ -3,70 +3,62 @@
 'use strict';
 
 angular.module('MyApp')
-	.controller('DailyCtrl', ['fakeDataService', '$scope', '$mdBottomSheet', '$location', '$stateParams',
-		function( fakeDataService, $scope, $mdBottomSheet, $location, $stateParams ) {
-
-	$scope.dayRecords = fakeDataService.getDayRecords;
-	$scope.availableSections = fakeDataService.getAvailableSections;
-
-	$scope.selections = {
-		selectedSection: 'overview'
-	};
-	$scope.selections.selectedDay = fakeDataService.getDayById(parseInt($stateParams.id), 10);
+	/*
+	 * Контроллер, связывающий воедино все секции веб-страницы: даты, секции 
+	 * и область данных
+	 */
+	.controller('DispatchCtrl', ['$scope',
+	function($scope) {
+		$scope.displayedItem = {};
+	}])
 
 	/*
-	 *
+	 * Контроллер, отвечающий за представление данных одного конкретного дня
 	 */
-	$scope.setSection = function(section) {
-		$scope.selections.selectedSection = section;
-		$scope.markers = section.markers;
-	};
-
-	$scope.changeDate = function() {
-		$scope.selections.selectedDate = 
-			new Date(Number($scope.selections.selectedDate) - 
-			$scope.selections.selectedDate.getTimezoneOffset() * 60000);
-		var s = $scope.selections.selectedDate;
-		$location.url('/day/' + s.getFullYear() + '-' +
-			String('0' + (s.getMonth() + 1)).split('').slice(-2).join('') + '-' + s.getDate());
-		$scope.selections.selectedDay = fakeDataService.getDayById($stateParams.id);
-	};
-
-	/* Добавляет новую секцию в запись текущего дня. Выбранная секция
-	 * удаляется из списка доступных для выбора секций, чтобы не было
-	 * возможности добавить дважды одну и ту же секцию.
-	 */
-	$scope.addSection = function() {
-		// Должна быть явно указана добавляемая секция
-		if (!$scope.selections.sectionToAdd) {
-			return;
-		}
+	.controller('DayCtrl', ['$scope', 'fakeDataService', '$stateParams',
+	function($scope, fakeDataService, $stateParams) {
+		$scope.$parent.displayedItem = fakeDataService.getDayById($stateParams.id);
 		
-		var removeIndex = $scope.availableSections.map(function(item) {
-			return item.type;
-		}).indexOf($scope.selections.sectionToAdd);
-
-		var section = (removeIndex > -1) && $scope.availableSections.splice(removeIndex, 1)[0];
-		if (section) {
-			$scope.selections.selectedDay.sections.push(section);
-			$scope.setSection(section);			
-		}
-		$scope.sectionToAdd = '';
-	};
-
-	$scope.criteriaMatch = function() {
-		return function(item) {
-			var match = false;
-			if (item.tags) {
-				var foundIndex = item.tags.map(function(tag) {
-					return tag.name;
-				}).indexOf('Важно');
-				match = (foundIndex > -1 && $scope.selections.selectedSection.type === 'overview');
+		$scope.$parent.selections = {
+			selectedSection: {
+				type: 'overview'
 			}
-			var result = (item.type === $scope.selections.selectedSection.type) || match;
-			return result;
 		};
-	};
+
+		$scope.criteriaMatch = function() {
+			return function(item) {
+				var match = false;
+				var sectionType = $scope.$parent.selections.selectedSection.type;
+				if (item.tags) {
+					var foundIndex = item.tags.map(function(tag) {
+						return tag.name;
+					}).indexOf('Важно');
+					match = (foundIndex > -1 && sectionType === 'overview');
+				}
+				var result = (item.type === sectionType) || match;
+				return result;
+			};
+		};
+
+	}])
+
+	/* 
+	 * Контроллер, отвечающий за корректное переключение периодов и выбор 
+	 * конкретного периода для отображения
+	 */
+	.controller('PeriodsCtrl', ['$scope', '$location',
+	function($scope, $location) {
+		$scope.changeDate = function() {
+			var s = new Date(Number($scope.selectedDate) - 
+				$scope.selectedDate.getTimezoneOffset() * 60000);
+			$location.url('/day/' + s.getFullYear() + '-' +
+				String('0' + (s.getMonth() + 1)).split('').slice(-2).join('') + '-' + 
+				String('0' + s.getDate()).split('').slice(-2).join(''));
+		};
+	}])
+
+	.controller('DailyCtrl', ['fakeDataService', '$scope', '$mdBottomSheet', 
+	function( fakeDataService, $scope, $mdBottomSheet ) {
 
 	$scope.editDetails = function(record) {
 
@@ -108,7 +100,7 @@ angular.module('MyApp')
 				};
 			};
 		}
-		console.log('editing record:' + JSON.stringify(record));
+
 		$mdBottomSheet.show({
 			controller: DetailsController,
 			controllerAs: 'detCtrl',
@@ -139,6 +131,40 @@ angular.module('MyApp')
 			$scope.short = '';				
 			$scope.recordForm.$setPristine();
 			$scope.recordForm.$setUntouched();
+		};
+	}])
+
+
+
+	.controller('DailySectionsCtrl', ['$scope', 'fakeDataService', 
+	function($scope, fakeDataService) {
+		$scope.availableSections = fakeDataService.getAvailableSections;
+
+		$scope.setSection = function(section) {
+			$scope.$parent.selections.selectedSection = section;
+			$scope.markers = section.markers;
+		};	
+
+		/* Добавляет новую секцию в запись текущего дня. Выбранная секция
+		 * удаляется из списка доступных для выбора секций, чтобы не было
+		 * возможности добавить дважды одну и ту же секцию.
+		 */
+		$scope.addSection = function() {
+			// Должна быть явно указана добавляемая секция
+			if (!$scope.$parent.selections.sectionToAdd) {
+				return;
+			}
+			
+			var removeIndex = $scope.availableSections.map(function(item) {
+				return item.type;
+			}).indexOf($scope.$parent.selections.sectionToAdd);
+
+			var section = (removeIndex > -1) && $scope.availableSections.splice(removeIndex, 1)[0];
+			if (section) {
+				$scope.$parent.displayedItem.sections.push(section);
+				$scope.setSection(section);		
+			}
+			$scope.$parent.selections.sectionToAdd = '';
 		};
 	}]);
 
